@@ -13,7 +13,7 @@ contract NumberManager {
 
     function addNumber(uint number) public {
         incrementTotalSum(number);
-        lastAddedNumber = number;
+        setLastAddedNumber(number);
     }
 
     function subtractNumber(uint number) public {
