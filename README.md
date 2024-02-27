@@ -1,13 +1,10 @@
-# Sample Hardhat Project
+# Homework for Blockchain Course
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Description
 
-Try running some of the following tasks:
+### Financial Management
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+Has 3 contracts 
+- UserManagement: base contract, contains utility functions for access control for 3 roles: admin, manager and user
+- FinancialOperations: allows user to deposit and withdraw coin into contract, inherits UserManagement
+- LoanSystem: allows user to submit a loan request to be approved by the manager, get the coin when the request is approved, and to repay the loan
