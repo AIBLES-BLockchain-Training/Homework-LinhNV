@@ -10,17 +10,17 @@ contract UserManagement {
     }
 
     modifier onlyAdmin {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "You must be an admin of the contract to perform this operation");
         _;
     }
 
     modifier onlyManager {
-        require(msg.sender == manager);
+        require(msg.sender == manager, "You must be a manager of the contract to perform this operation");
         _;
     }
 
     modifier onlyUser {
-        require(msg.sender != admin && msg.sender != manager);
+        require(msg.sender != admin && msg.sender != manager, "You must be a user of the contract to perform this operation");
         _;
     }
 
@@ -43,9 +43,9 @@ contract FinancialOperations is UserManagement {
     function withdraw(uint amount) public {
         require(deposits[msg.sender] >= amount, "Withdrawing greater than deposited amount!");
         require(address(this).balance >= amount, "Bank run :(");
+        deposits[msg.sender] -= amount;
         (bool sent, bytes memory data) = msg.sender.call{ value: amount }("");
         require(sent, "Failed to send Ether");
-        deposits[msg.sender] -= amount;
     }
 }
 
@@ -81,7 +81,10 @@ contract LoanSystem is FinancialOperations {
 
     function repay() payable public onlyUser {
         if (msg.value > loanRequests[msg.sender].amount) {
+            uint extraAmount = msg.value - loanRequests[msg.sender].amount;
             loanRequests[msg.sender].amount = 0; // Thanks for the donation!
+            (bool sent, bytes memory data) = msg.sender.call{ value: extraAmount }("");
+            require(sent, "Failed to send Ether");
         } else {
             loanRequests[msg.sender].amount -= msg.value;
         }
